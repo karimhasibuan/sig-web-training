@@ -5,3 +5,10 @@ h1 {
 p {
   border: 1px solid red;
 }
+
+.text-blue {
+  color: blue;
+}
+.text-red {
+  color: red;
+}
