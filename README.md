@@ -2,7 +2,7 @@ Documentation section.
 
 ## Training overview
 
-This training is training website for build a GIS website.
+This training is website development training for build a _Geographic Information System_ (GIS) website.
 
 ## Tools Used
 
