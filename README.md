@@ -8,7 +8,7 @@ Browser: [Google Chrome](https://www.google.com/chrome/?brand=CHBD&brand=CHBD&gc
 
 API Testing: [Insomnia](https://insomnia.rest/)
 
-## Materials Resource
+## Materials Resource Learning
 
 HTML Language: [HTML](https://www.w3schools.com/tags/tag_html.asp)
 
