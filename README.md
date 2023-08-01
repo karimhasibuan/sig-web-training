@@ -1,5 +1,9 @@
 Documentation section.
 
+## Training overview
+
+This training is training website for build a GIS website.
+
 ## Tools Used
 
 Code Editor: [Visual Studio Code](https://code.visualstudio.com/)
