@@ -8,11 +8,13 @@ Browser: [Google Chrome](https://www.google.com/chrome/?brand=CHBD&brand=CHBD&gc
 
 API Testing: [Insomnia](https://insomnia.rest/)
 
+Chrome Browser Extension: [Web Developer Extension](https://chrome.google.com/webstore/detail/web-developer/bfbameneiokkgbdmiekhjnmfkcnldhhm)
+
 ## Materials Resource Learning
 
-HTML : [Visit Link](https://www.w3schools.com/tags/tag_html.asp)
+HTML: [Visit Link](https://www.w3schools.com/tags/tag_html.asp)
 
-CSS : [Visit Link](https://www.w3schools.com/css/)
+CSS: [Visit Link](https://www.w3schools.com/css/)
 
 ---
 
