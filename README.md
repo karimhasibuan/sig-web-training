@@ -18,6 +18,8 @@ API Testing: [Insomnia](https://insomnia.rest/)
 
 GIS Map: [Leaflet](https://leafletjs.com/)
 
+Laravel 8: [Documentation Link](https://laravel.com/docs/8.x)
+
 Chrome Browser Extension: [Web Developer Extension](https://chrome.google.com/webstore/detail/web-developer/bfbameneiokkgbdmiekhjnmfkcnldhhm)
 
 ## Materials Resource Learning
