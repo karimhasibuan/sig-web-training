@@ -8,6 +8,16 @@ class GisController extends Controller
 {
     public function index()
     {
-        return view('welcome');
+        $fileNames = [];
+        $path = public_path('geojson');
+        $files = \File::allFiles($path);
+
+        foreach ($files as $file) {
+            array_push($fileNames, pathinfo($file)['filename'] . '.geojson');
+        }
+
+        $jsonFileName = json_encode($fileNames);
+
+        return view('beranda', compact('jsonFileName'));
     }
 }
