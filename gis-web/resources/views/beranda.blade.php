@@ -26,6 +26,38 @@
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
+
+        const dataSumut = <?= json_encode($dataJsonSumut) ?>;
+
+        async function getAPIFcm(data) {
+            const response = await fetch('http://127.0.0.1:5000/fcm', {
+                method: 'POST',
+                mode: 'no-cors',
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Credentials": true
+                },
+                body: JSON.stringify(data),
+            })
+            const result = await response.json();
+            return result;
+        }
+
+        const dataRESTAPI = getAPIFcm(dataSumut)
+        console.log(dataRESTAPI)
+
+        async function getDataGeoJson(url) {
+            const response = await fetch(url)
+            const result = await response.json()
+            console.log(result)
+            L.geoJSON(result).addTo(map);
+        }
+
+        // dataSumut.forEach(item => {
+        //     getDataGeoJson("/geojson/" + item.file_geojson)
+        // });
     </script>
 </body>
 
