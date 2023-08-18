@@ -26,20 +26,6 @@
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
-
-        // const dataFileGeo = JSON.parse('<?= $jsonFileName ?>');
-        // console.log(dataFileGeo);
-
-        // async function getDataGeoJson(url) {
-        //     const response = await fetch(url)
-        //     const result = await response.json()
-        //     console.log(result)
-        //     L.geoJSON(result).addTo(map);
-        // }
-
-        // dataFileGeo.forEach(url => {
-        //     getDataGeoJson("/geojson/" + url)
-        // });
     </script>
 </body>
 
