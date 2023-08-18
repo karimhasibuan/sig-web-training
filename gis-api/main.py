@@ -16,11 +16,11 @@ def fcm():
     
     #step 2: create dataframe from JSON data
     df = pd.DataFrame(data)
-    dfLengkap = df[['Kab_Kota']]
+    dfLengkap = df[['nama']]
     # print(df)
 
     #step 3: data processing
-    df.drop(['ID_Kab_Kota', 'Kab_Kota','Jumlah Penduduk','Longitude','Latitude'], axis=1, inplace=True)
+    df.drop(['kab_id', 'nama','jumlah_penduduk','latitude','longitude', 'file_geojson'], axis=1, inplace=True)
 
     number_clusters = 3
     fcm = FCM(n_clusters=number_clusters)
