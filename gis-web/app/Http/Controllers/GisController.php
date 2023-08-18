@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GisController extends Controller
 {
@@ -18,7 +19,10 @@ class GisController extends Controller
         // }
 
         // $jsonFileName = json_encode($fileNames);
+        $dataSumut = DB::table('data_covid')->get();
 
-        return view('beranda');
+        $dataJsonSumut = json_encode($dataSumut);
+
+        return view('beranda', compact('dataJsonSumut'));
     }
 }
