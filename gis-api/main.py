@@ -18,13 +18,18 @@ def fcm():
     data = request.get_json()
     
     #step 2: create dataframe from JSON data
-    df = pd.DataFrame(data)
-    dfLengkap = df[['nama']]
+    df = pd.DataFrame(data['data'])
+    dfLengkap = df.copy()
     # print(df)
 
     #step 3: data processing
     df.drop(['kab_id', 'nama','jumlah_penduduk','latitude','longitude', 'file_geojson'], axis=1, inplace=True)
 
+    print(df)
+    df['konfirmasi'] = pd.to_numeric(df['konfirmasi'])
+    df['sembuh'] = pd.to_numeric(df['sembuh'])
+    df['meninggal'] = pd.to_numeric(df['meninggal'])
+    
     number_clusters = 3
     fcm = FCM(n_clusters=number_clusters)
     fcm.fit(df.values)
@@ -33,6 +38,8 @@ def fcm():
     fcm_centers = fcm.centers
     fcm_labels = fcm.predict(df.values)
     dfLengkap['Fuzzy_cluster'] = fcm_labels
+
+    print(dfLengkap)
     
     #step 5: convert dataframe to JSON
     json_result = dfLengkap.to_json(orient="records")
