@@ -1,10 +1,13 @@
 from flask import Flask, request
 import pandas as pd
 from fcmeans import FCM
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/")
+
 def hello_world():
     return "<p>Hello, World!</p>"
 
