@@ -26,20 +26,18 @@
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
-
-        const dataSumut = <?= json_encode($dataJsonSumut) ?>;
+        const dataSumut = JSON.parse('<?= $dataJsonSumut ?>');
 
         async function getAPIFcm(data) {
             const response = await fetch('http://127.0.0.1:5000/fcm', {
                 method: 'POST',
-                mode: 'no-cors',
-
+                body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json',
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Credentials": true
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': 'true',
+
                 },
-                body: JSON.stringify(data),
             })
             const result = await response.json();
             return result;
@@ -51,13 +49,12 @@
         async function getDataGeoJson(url) {
             const response = await fetch(url)
             const result = await response.json()
-            console.log(result)
             L.geoJSON(result).addTo(map);
         }
 
-        // dataSumut.forEach(item => {
-        //     getDataGeoJson("/geojson/" + item.file_geojson)
-        // });
+        dataSumut.forEach(item => {
+            getDataGeoJson("/geojson/" + item.file_geojson)
+        });
     </script>
 </body>
 
