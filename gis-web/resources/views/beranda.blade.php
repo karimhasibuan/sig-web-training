@@ -28,23 +28,30 @@
         }).addTo(map);
         const dataSumut = JSON.parse('<?= $dataJsonSumut ?>');
 
+        console.log(dataSumut)
+
         async function getAPIFcm(data) {
-            const response = await fetch('http://127.0.0.1:5000/fcm', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': 'true',
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/fcm', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            data
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Credentials': 'true',
 
-                },
+                        },
+                    })
+                    const result = await response.json();
+                    resolve(result)
+                } catch (error) {
+                    reject(error)
+                }
             })
-            const result = await response.json();
-            return result;
         }
-
-        const dataRESTAPI = getAPIFcm(dataSumut)
-        console.log(dataRESTAPI)
 
         async function getDataGeoJson(url) {
             const response = await fetch(url)
@@ -52,9 +59,15 @@
             L.geoJSON(result).addTo(map);
         }
 
-        dataSumut.forEach(item => {
-            getDataGeoJson("/geojson/" + item.file_geojson)
-        });
+        getAPIFcm(dataSumut).then(result => {
+                console.log(result)
+                result.forEach(item => {
+                    getDataGeoJson("/geojson/" + item.file_geojson)
+                })
+            })
+            .catch(error => {
+                console.log(error)
+            })
     </script>
 </body>
 
