@@ -59,8 +59,71 @@
             L.geoJSON(result).addTo(map);
         }
 
+        function addColorCluster(data) {
+            var uniqueClusters = [...new Set(data.map(item => item.Fuzzy_cluster))];
+            console.log(uniqueClusters);
+
+            const result = [];
+            uniqueClusters.forEach((item, index) => {
+                result.push({
+                    cluster: item,
+                })
+            })
+
+            console.log(result);
+
+            result.forEach((item, i) => {
+                let cluster = item.cluster;
+                let sumKonfirmasi = 0;
+                let sumSembuh = 0;
+                let sumMeninggal = 0;
+                let countKonfirmasi = 0;
+                let countSembuh = 0;
+                let countMeninggal = 0;
+
+                data.forEach((kabupaten) => {
+                    if (kabupaten.Fuzzy_cluster == cluster) {
+                        sumSembuh += parseFloat(kabupaten.sembuh);
+                        countSembuh++;
+                        sumKonfirmasi += parseFloat(kabupaten.konfirmasi);
+                        countKonfirmasi++;
+                        sumMeninggal += parseFloat(kabupaten.meninggal);
+                        countMeninggal++;
+                    }
+                })
+
+                item.avgSembuh = sumSembuh / countSembuh;
+                item.avgKonfirmasi = sumKonfirmasi / countKonfirmasi;
+                item.avgMeninggal = sumMeninggal / countMeninggal;
+            })
+
+            console.log(result);
+
+            result.sort((a, b) => {
+                if (a.avgSembuh !== b.avgSembuh) {
+                    return a.avgSembuh - b.avgSembuh;
+                } else if (a.avgSembuh !== b.avgSembuh) {
+                    return a.avgKonfirmasi - b.avgKonfirmasi;
+                } else {
+                    return a.avgMeninggal - b.avgMeninggal;
+                }
+            })
+            console.log(result);
+            const colorMap = ["#54B435", "#82CD47", "#F0FF42"];
+            result.forEach((item, index) => {
+                item.color = colorMap[index];
+            })
+
+            return result;
+        }
+
         getAPIFcm(dataSumut).then(result => {
                 console.log(result)
+
+                const colorCluster = addColorCluster(result)
+
+                console.log(colorCluster)
+
                 result.forEach(item => {
                     getDataGeoJson("/geojson/" + item.file_geojson)
                 })
