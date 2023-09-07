@@ -53,10 +53,21 @@
             })
         }
 
-        async function getDataGeoJson(url) {
+
+
+        async function getDataGeoJson(url, dataColor, dataWilayah) {
             const response = await fetch(url)
             const result = await response.json()
-            L.geoJSON(result).addTo(map);
+            L.geoJSON(result, {
+                style: {
+                    fillColor: dataColor,
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                }
+            }).bindPopup(`Nama Kabupaten Kota: ${dataWilayah.nama}`).addTo(map);
         }
 
         function addColorCluster(data) {
@@ -125,7 +136,7 @@
                 console.log(colorCluster)
 
                 result.forEach(item => {
-                    getDataGeoJson("/geojson/" + item.file_geojson)
+                    getDataGeoJson("/geojson/" + item.file_geojson, colorCluster.find(cluster => cluster.cluster == item.Fuzzy_cluster).color, item)
                 })
             })
             .catch(error => {
