@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [GisController::class, 'index']);
+Route::get('/php_fuzzycmeans', [GisController::class, 'fuzzycmeans']);
