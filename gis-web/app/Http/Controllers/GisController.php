@@ -72,6 +72,40 @@ class GisController extends Controller
         return $data;
     }
 
+    private function generateRandomValue()
+    {
+        return rand(0, 100) / 100;
+    }
+
+    private function generateDuaData($data)
+    {
+        $tmp = [];
+        do {
+            $tmp = [];
+            for ($i = 0; $i < 2; $i++) {
+                $tmp[] = $data[rand(0, count($data) - 1)];
+            }
+            $tmp[] = 1 - ($tmp[0] + $tmp[1]);
+        } while ($tmp[0] <= 0 || $tmp[1] <= 0);
+        return $tmp;
+    }
+
+    private function generateTigaData($data)
+    {
+        $tmp = [];
+        do {
+            $tmp = [];
+            for ($i = 0; $i < 3; $i++) {
+                $tmp[] = $data[rand(0, count($data) - 1)];
+            }
+            $tmp[] = 1 - ($tmp[0] + $tmp[1]);
+            if ($tmp[2] > 0) {
+                $tmp[0] = 1 - ($tmp[1] + $tmp[2]);
+            }
+        } while ($tmp[0] <= 0 || $tmp[1] <= 0 || $tmp[2] <= 0);
+        return $tmp;
+    }
+
 
 
 
