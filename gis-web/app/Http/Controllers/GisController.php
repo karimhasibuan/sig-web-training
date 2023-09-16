@@ -26,6 +26,28 @@ class GisController extends Controller
         return view('beranda', compact('dataJsonSumut'));
     }
 
+    private function dataCleaning($data)
+    {
+        // Create method for data cleaning. If 0 will be replaced with mean of column
+        $countColumn = count($data[0]);
+        for ($i = 0; $i < $countColumn; $i++) {
+            $tmpAvg = 0;
+            $tmpSum = 0;
+            for ($j = 0; $j < count($data); $j++) {
+                $tmpSum += $data[$j][$i];
+            }
+            $tmpAvg = $tmpSum / count($data);
+
+            for ($k = 0; $k < count($data); $k++) {
+                if ($data[$k][$i] == 0) {
+                    $data[$k][$i] = $tmpAvg;
+                }
+            }
+        }
+
+        return $data;
+    }
+
     private function zscore($data)
     {
         $countColumn = count($data[0]);
@@ -50,6 +72,25 @@ class GisController extends Controller
         return $data;
     }
 
+
+
+
+
+    private function originalFuzzyCmeans($data)
+    {
+        $dataMatrikPartisi = [];
+        $countColumn = count($data[0]);
+        for ($i = 0; $i < count($data); $i++) {
+            $tmp = [];
+            for ($j = 0; $j < $countColumn; $j++) {
+                rand(0, 1);
+            }
+            $dataMatrikPartisi[] = [0, 0, 0];
+        }
+    }
+
+
+
     public function fuzzycmeans()
     {
         $dataCovid = DB::table('data_covid')->get();
@@ -64,11 +105,15 @@ class GisController extends Controller
                 ];
         }
 
-        // dd($dataSelection);
+        // Data Cleaning
+        $dataCleaning = $this->dataCleaning($dataSelection);
 
         // Normalisasi data
-        $dataNormalisasi = $this->zscore($dataSelection);
+        $dataNormalisasi = $this->zscore($dataCleaning);
 
-        dd($dataNormalisasi);
+        // Fuzzy Cluster
+        $dataHasilCluster = $this->originalFuzzyCmeans($dataNormalisasi);
+
+        dd($dataHasilCluster);
     }
 }
