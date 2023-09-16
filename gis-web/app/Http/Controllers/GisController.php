@@ -96,7 +96,7 @@ class GisController extends Controller
         do {
             $tmp = [];
             for ($i = 0; $i < 3; $i++) {
-                $tmp[] = $data[rand(0, count($data) - 1)];
+                $tmp[] = $this->generateRandomValue();
             }
             $tmp[] = 1 - ($tmp[0] + $tmp[1]);
             if ($tmp[2] > 0) {
@@ -115,10 +115,8 @@ class GisController extends Controller
         $dataMatrikPartisi = [];
         $countColumn = count($data[0]);
         for ($i = 0; $i < count($data); $i++) {
-            $tmp = [];
-            for ($j = 0; $j < $countColumn; $j++) {
-                rand(0, 1);
-            }
+            $tmp = $this->generateTigaData($countColumn);
+            dd($tmp);
             $dataMatrikPartisi[] = [0, 0, 0];
         }
     }
