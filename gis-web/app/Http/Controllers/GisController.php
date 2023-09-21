@@ -81,27 +81,20 @@ class GisController extends Controller
     {
         $tmp = [];
         do {
-            $tmp = [];
-            for ($i = 0; $i < 2; $i++) {
-                $tmp[] = $data[rand(0, count($data) - 1)];
-            }
-            $tmp[] = 1 - ($tmp[0] + $tmp[1]);
+            $tmp[0] = $this->generateRandomValue();
+            $tmp[1] = 1 - $tmp[0];
         } while ($tmp[0] <= 0 || $tmp[1] <= 0);
         return $tmp;
     }
 
-    private function generateTigaData($data)
+    private function generateTigaData($count)
     {
         $tmp = [];
         do {
-            $tmp = [];
-            for ($i = 0; $i < 3; $i++) {
-                $tmp[] = $this->generateRandomValue();
+            for ($i = 0; $i < $count - 1; $i++) {
+                $tmp[$i] = $this->generateRandomValue();
             }
-            $tmp[] = 1 - ($tmp[0] + $tmp[1]);
-            if ($tmp[2] > 0) {
-                $tmp[0] = 1 - ($tmp[1] + $tmp[2]);
-            }
+            $tmp[$count - 1] = 1 - ($tmp[0] + $tmp[1]);
         } while ($tmp[0] <= 0 || $tmp[1] <= 0 || $tmp[2] <= 0);
         return $tmp;
     }
@@ -117,7 +110,36 @@ class GisController extends Controller
         for ($i = 0; $i < count($data); $i++) {
             $tmp = $this->generateTigaData($countColumn);
             dd($tmp);
-            $dataMatrikPartisi[] = [0, 0, 0];
+            $dataMatrikPartisi[] = $tmp;
+
+            dd($dataMatrikPartisi);
+
+            $bobot = 2;
+
+            $dataCalonCentroid = [];
+
+            $hasilJumlahUiPangkatBobot = [];
+            for ($h = 0; $h < count($dataMatrikPartisi[0]); $h++) {
+                $dataUiPangkatBobot = [];
+                for ($j = 0; $j < count($dataMatrikPartisi); $j++) {
+                    $tmp = pow($dataMatrikPartisi[$j][$h], $bobot);
+                    $dataUiPangkatBobot[] = $tmp;
+                }
+                $dataUiPangkatBobotKaliData = [];
+                $jumlahUipangkatBobot = 0;
+                for ($j = 0; $j < count($data); $j++) {
+                    $tmp = [];
+                    $jumlahUipangkatBobot += $dataUiPangkatBobot[$j];
+                    for ($k = 0; $k < count($data[$j]); $k++) {
+                        $tmp = $data[$j][$k] * $dataUiPangkatBobot[$j];
+                    }
+                    $dataUiPangkatBobotKaliData[] = $tmp;
+                }
+
+                $hasilJumlahUiPangkatBobot[] = $jumlahUipangkatBobot;
+
+                $dataCalonCentroid[] = $dataUiPangkatBobotKaliData;
+            }
         }
     }
 
