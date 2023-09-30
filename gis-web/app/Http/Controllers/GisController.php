@@ -106,59 +106,119 @@ class GisController extends Controller
 
     private function originalFuzzyCmeans($data)
     {
-        $dataMatrikPartisi = [];
-        $countColumn = count($data[0]);
-        for ($i = 0; $i < count($data); $i++) {
-            $tmp = $this->generateTigaData($countColumn);
-
-            $dataMatrikPartisi[] = $tmp;
-        }
-
+        $dataCentroid = [];
+        $totalLtSebelumnya = 0;
+        $loop = 1;
         $bobot = 2;
 
-        $dataCalonCentroid = [];
-        $hasilJumlahUiPangkatBobot = [];
-        $hasilJumlahUiBobotKaliXi = [];
+        do {
+            dump($loop);
+            $dataMatrikPartisi = [];
+            if ($loop == 1) {
+                $countColumn = count($data[0]);
+                for ($i = 0; $i < count($data); $i++) {
+                    $tmp = $this->generateTigaData($countColumn);
 
-        for ($h = 0; $h < count($dataMatrikPartisi[0]); $h++) {
-            $dataUiPangkatBobot = [];
-            for ($j = 0; $j < count($dataMatrikPartisi); $j++) {
-                $tmp = pow($dataMatrikPartisi[$j][$h], $bobot);
-                $dataUiPangkatBobot[] = $tmp;
-            }
-            $dataUiBobotKaliData = [];
-            $jumlahUipangkatBobot = 0;
-            $tmpJumlahUiBobotKaliXi = [0, 0, 0];
-            for ($j = 0; $j < count($data); $j++) {
-                $tmp = [];
-                $jumlahUipangkatBobot += $dataUiPangkatBobot[$j];
-                for ($k = 0; $k < count($data[$j]); $k++) {
-                    $hasilKali = $data[$j][$k] * $dataUiPangkatBobot[$j];
-                    $tmp[] = $hasilKali;
-                    $tmpJumlahUiBobotKaliXi[$k] += $hasilKali;
+                    $dataMatrikPartisi[] = $tmp;
                 }
-                $dataUiBobotKaliData[] = $tmp;
+            } else {
+                $matrikPartisiBaru = [];
+                for ($i = 0; $i < count($data); $i++) {
+                    $tmp = [];
+                    for ($j = 0; $j < count($dataCentroid); $j++) {
+                        $tmpNilai = 0;
+                        for ($k = 0; $k < count($data[$i]); $k++) {
+                            $tmpNilai += pow($data[$i][1] - $dataCentroid[$j][1], 2);
+                        }
+                        $tmp[] = pow($tmpNilai, (-1 / ($bobot - 1)));
+                    }
+                    $matrikPartisiBaru[] = $tmp;
+                }
+                for ($i = 0; $i < count($matrikPartisiBaru); $i++) {
+                    $tmpNilai = 0;
+                    for ($j = 0; $j < count($matrikPartisiBaru[$i]); $j++) {
+                        $tmpNilai += $matrikPartisiBaru[$i][$j];
+                    }
+                    $tmp = [];
+                    for ($k = 0; $k < count($matrikPartisiBaru[$i]); $k++) {
+                        $tmp[] = $matrikPartisiBaru[$i][$k] / $tmpNilai;
+                    }
+                    $dataMatrikPartisi[] = $tmp;
+                }
             }
 
-            $hasilJumlahUiPangkatBobot[] = $jumlahUipangkatBobot;
-            $hasilJumlahUiBobotKaliXi[] = $tmpJumlahUiBobotKaliXi;
+            $dataCalonCentroid = [];
+            $hasilJumlahUiPangkatBobot = [];
+            $hasilJumlahUiBobotKaliXi = [];
+            $kuadratDerajatKeanggotaan = [];
 
-            $dataCalonCentroid[] = $dataUiBobotKaliData;
-        }
+            for ($h = 0; $h < count($dataMatrikPartisi[0]); $h++) {
+                $dataUiPangkatBobot = [];
+                for ($j = 0; $j < count($dataMatrikPartisi); $j++) {
+                    $tmp = pow($dataMatrikPartisi[$j][$h], $bobot);
+                    $dataUiPangkatBobot[] = $tmp;
+                }
+                $kuadratDerajatKeanggotaan[] = $dataUiPangkatBobot;
+                $dataUiBobotKaliData = [];
+                $jumlahUipangkatBobot = 0;
+                $tmpJumlahUiBobotKaliXi = [0, 0, 0];
+                for ($j = 0; $j < count($data); $j++) {
+                    $tmp = [];
+                    $jumlahUipangkatBobot += $dataUiPangkatBobot[$j];
+                    for ($k = 0; $k < count($data[$j]); $k++) {
+                        $hasilKali = $data[$j][$k] * $dataUiPangkatBobot[$j];
+                        $tmp[] = $hasilKali;
+                        $tmpJumlahUiBobotKaliXi[$k] += $hasilKali;
+                    }
+                    $dataUiBobotKaliData[] = $tmp;
+                }
 
-        dump($hasilJumlahUiPangkatBobot);
-        dump($hasilJumlahUiBobotKaliXi);
+                $hasilJumlahUiPangkatBobot[] = $jumlahUipangkatBobot;
+                $hasilJumlahUiBobotKaliXi[] = $tmpJumlahUiBobotKaliXi;
 
-        $dataCentroid = [];
-        for ($i = 0; $i < count($hasilJumlahUiBobotKaliXi); $i++) {
-            $tmp1 = [];
-            for ($j = 0; $j < count($hasilJumlahUiBobotKaliXi[$i]); $j++) {
-                $tmp2 = $hasilJumlahUiBobotKaliXi[$i][$j] / $hasilJumlahUiPangkatBobot[$j];
-                $tmp1[] = $tmp2;
+                $dataCalonCentroid[] = $dataUiBobotKaliData;
             }
-            $dataCentroid[] = $tmp1;
-        }
-        dump($dataCentroid);
+
+            dump($hasilJumlahUiPangkatBobot);
+            dump($hasilJumlahUiBobotKaliXi);
+
+            $dataCentroid = [];
+            for ($i = 0; $i < count($hasilJumlahUiBobotKaliXi); $i++) {
+                $tmp1 = [];
+                for ($j = 0; $j < count($hasilJumlahUiBobotKaliXi[$i]); $j++) {
+                    $tmp2 = $hasilJumlahUiBobotKaliXi[$i][$j] / $hasilJumlahUiPangkatBobot[$j];
+                    $tmp1[] = $tmp2;
+                }
+                $dataCentroid[] = $tmp1;
+            }
+            dump($dataCentroid);
+
+            $resultJarakKaliUi = [];
+            for ($j = 0; $j < count($dataCentroid); $j++) {
+                $tmpL = [];
+                for ($i = 0; $i < count($data); $i++) {
+                    $tmp = 0;
+                    for ($k = 0; $k < count($data[$i]); $k++) {
+                        $tmp += pow($data[$i][$k] - $dataCentroid[$j][$k], 2);
+                    }
+                    $tmpL = $tmp * $kuadratDerajatKeanggotaan[$j][$i];
+                }
+                $resultJarakKaliUi[] = $tmpL;
+            }
+
+            $totalLt = 0;
+            for ($i = 0; $i < count($resultJarakKaliUi[0]); $i++) {
+                $sumLt = 0;
+                for ($j = 0; $j < count($resultJarakKaliUi); $j++) {
+                    $sumLt += $resultJarakKaliUi[$j][$i];
+                }
+                $totalLt += $sumLt;
+            }
+            dump($totalLt);
+            $selisiFungsiObjectif = abs($totalLt - $totalLtSebelumnya);
+            $totalLtSebelumnya = $totalLt;
+            $loop += 1;
+        } while ($selisiFungsiObjectif > 0.000001);
     }
 
 
