@@ -91,14 +91,14 @@ class GisController extends Controller
         return $tmp;
     }
 
-    private function generateTigaData($count)
+    private function generateTigaData($countValue)
     {
         $tmp = [];
         do {
-            for ($i = 0; $i < $count - 1; $i++) {
+            for ($i = 0; $i < $countValue - 1; $i++) {
                 $tmp[$i] = $this->generateRandomValue();
             }
-            $tmp[$count - 1] = 1 - ($tmp[0] + $tmp[1]);
+            $tmp[$countValue - 1] = 1 - ($tmp[0] + $tmp[1]);
         } while ($tmp[0] <= 0 || $tmp[1] <= 0 || $tmp[2] <= 0);
         return $tmp;
     }
